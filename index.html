@@ -1,0 +1,166 @@
+﻿<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffcb05">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Elite Trainer Hub</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="bg-decor"></div>
+  <header class="app-header">
+    <h1>Elite Trainer Hub</h1>
+    <p>Companion offline para Pokemon GO</p>
+    <details class="lang-menu" id="lang-menu">
+      <summary id="lang-summary">Idioma</summary>
+      <div class="lang-options">
+        <button type="button" class="lang-btn" data-lang="es">Espanol</button>
+        <button type="button" class="lang-btn" data-lang="en">English</button>
+        <button type="button" class="lang-btn" data-lang="fr">Francais</button>
+      </div>
+    </details>
+  </header>
+
+  <nav class="tabs" aria-label="Modulos">
+    <button class="tab active" data-tab="pokemon">Pokedex</button>
+    <button class="tab" data-tab="calc">Calculadora</button>
+    <button class="tab" data-tab="iv">IV</button>
+    <button class="tab" data-tab="check">Checklist</button>
+    <button class="tab" data-tab="mapa">Mapa</button>
+    <button class="tab" data-tab="record">Recordatorios</button>
+  </nav>
+
+  <main class="content">
+    <section id="tab-pokemon" class="panel active">
+      <h2>Tu Pokedex personal</h2>
+      <div class="pokemon-top-layout">
+        <div>
+          <form id="pokemon-form" class="grid-form">
+            <input required name="name" placeholder="Nombre (ej: Dragonite)">
+            <input type="number" min="10" name="cp" placeholder="CP">
+            <input type="number" min="0" max="45" step="1" name="iv" placeholder="IV (0-45)">
+            <input name="moves" placeholder="Movimientos">
+            <input type="date" name="date">
+            <input name="notes" placeholder="Notas">
+            <button type="submit">Guardar Pokemon</button>
+          </form>
+        </div>
+        <div>
+          <div class="filters">
+            <label><input type="checkbox" id="pokemon-fav-only"> Solo favoritos</label>
+          </div>
+          <h3 id="saved-pokemon-title">Pokemones guardados</h3>
+          <ul id="pokemon-list" class="card-list"></ul>
+        </div>
+      </div>
+
+      <h3 id="moves-title">Lista de movimientos</h3>
+      <div class="filters">
+        <input id="move-search" placeholder="Buscar movimiento (ej: Avalanche, Shadow Ball)">
+      </div>
+      <small id="move-pick-hint" class="hint">Toca un movimiento para agregarlo o quitarlo del campo Movimientos.</small>
+      <small id="move-count" class="hint"></small>
+      <ul id="move-list" class="chip-list"></ul>
+    </section>
+
+    <section id="tab-calc" class="panel">
+      <h2>Calculadora de mejora</h2>
+      <form id="calc-form" class="grid-form">
+        <input type="number" min="1" max="50" step="0.5" name="currentLevel" placeholder="Nivel actual">
+        <input type="number" min="1" max="50" step="0.5" name="targetLevel" placeholder="Nivel objetivo">
+        <input type="number" min="10" name="currentCp" placeholder="CP actual">
+        <input type="number" min="10" name="targetCp" placeholder="CP objetivo">
+        <button type="submit">Calcular recursos</button>
+      </form>
+      <div id="calc-result" class="result"></div>
+
+      <h3>Estimador de nivel</h3>
+      <p class="hint">Mira en Pokemon GO el costo de la proxima mejora y cargalo aqui.</p>
+      <form id="level-form" class="grid-form">
+        <input type="number" min="200" step="100" name="nextDust" placeholder="Polvo de la proxima mejora">
+        <input type="number" min="1" step="1" name="nextCandy" placeholder="Caramelos de la proxima mejora">
+        <div class="btn-row">
+          <button type="submit">Estimar nivel</button>
+          <button type="reset" id="level-reset-btn">Restablecer</button>
+        </div>
+      </form>
+      <div id="level-result" class="result"></div>
+    </section>
+
+    <section id="tab-iv" class="panel">
+      <h2>Calculadora de IV</h2>
+      <p class="hint">Ingresa Ataque, Defensa y PS (0 a 15) para calcular IV total y porcentaje.</p>
+      <form id="iv-form" class="grid-form">
+        <input type="number" min="0" max="15" step="1" name="atk" placeholder="Ataque IV">
+        <input type="number" min="0" max="15" step="1" name="def" placeholder="Defensa IV">
+        <input type="number" min="0" max="15" step="1" name="sta" placeholder="PS IV">
+        <div class="btn-row">
+          <button type="submit">Calcular IV</button>
+          <button type="reset" id="iv-reset-btn">Restablecer</button>
+        </div>
+      </form>
+      <div id="iv-result" class="result"></div>
+    </section>
+
+    <section id="tab-check" class="panel">
+      <h2>Checklist diario y semanal</h2>
+      <div class="two-col">
+        <div>
+          <h3>Diario</h3>
+          <ul id="daily-list" class="check-list"></ul>
+        </div>
+        <div>
+          <h3>Semanal</h3>
+          <ul id="weekly-list" class="check-list"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-mapa" class="panel">
+      <h2>Mapa personal (offline)</h2>
+      <p class="hint">Corregido: Pokestops y Gyms se guardan automaticamente al escribir.</p>
+      <form id="place-form" class="grid-form">
+        <input required name="name" placeholder="Nombre del lugar">
+        <select name="type" required>
+          <option value="">Tipo</option>
+          <option value="PokeStop">PokeStop</option>
+          <option value="Gym">Gym</option>
+        </select>
+        <input name="area" placeholder="Zona/Barrio">
+        <textarea name="notes" placeholder="Notas"></textarea>
+        <input name="lat" placeholder="Latitud" readonly>
+        <input name="lng" placeholder="Longitud" readonly>
+        <div class="btn-row">
+          <button type="button" id="geo-btn">Usar mi ubicacion</button>
+          <button type="button" id="new-place-btn">Nuevo registro</button>
+        </div>
+        <label><input type="checkbox" id="place-autosave" checked> Guardar automaticamente</label>
+      </form>
+      <ul id="place-list" class="card-list"></ul>
+    </section>
+
+    <section id="tab-record" class="panel">
+      <h2>Recordatorios</h2>
+      <form id="reminder-form" class="grid-form">
+        <input required name="title" placeholder="Evento (ej: Hora destacada)">
+        <input required type="datetime-local" name="when">
+        <input name="note" placeholder="Nota">
+        <button type="submit">Agregar recordatorio</button>
+      </form>
+      <ul id="reminder-list" class="card-list"></ul>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <small>Todo se guarda localmente en tu iPhone.</small>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
+
+

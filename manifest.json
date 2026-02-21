@@ -1,0 +1,18 @@
+﻿{
+  "name": "Elite Trainer Hub",
+  "short_name": "Elite Trainer Hub",
+  "description": "Companion offline para Pokemon GO",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#ffcb05",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "./icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
